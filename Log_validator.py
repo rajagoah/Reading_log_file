@@ -17,6 +17,8 @@ def list_files(path):
     return files
 
 def log_validator(path, files, exception_msg, exception_line_1, exception_line_2, exception_line_3, error_msg, fatal_msg, OutOfMemory_msg):
+    status = 0
+    validator_Logger.info(path)
     for file in files:
         validator_Logger.info("***************************************************************************")
         validator_Logger.info(file)
@@ -31,20 +33,24 @@ def log_validator(path, files, exception_msg, exception_line_1, exception_line_2
                 if line.find(exception_line_1) == -1:
                     if line.find(exception_line_2) == -1:
                         if line.find(exception_line_3) == -1:
-                            print(line)
-                            continue
+                            validator_Logger.info(line)
+                            status += 1
+                continue
             if line.find(error_msg) != -1:
-                print(line)
+                validator_Logger.info(line)
+                status += 1
                 continue
             if line.find(fatal_msg) != -1:
-                print(line)
+                validator_Logger.info(line)
+                status += 1
                 continue
             if line.find(OutOfMemory_msg) != -1:
-                print(line)
+                validator_Logger.info(line)
+                status += 1
                 continue
             else:
-                1
-    return 0
+                True
+    return status
 
 def main():
 
@@ -68,7 +74,9 @@ def main():
     validator_Logger.info(" Beginning Log validation")
     status = log_validator(path, files, exception_msg, exception_line_1, exception_line_2, exception_line_3, error_msg, fatal_msg, OutOfMemory_msg)
 
-    if status == 0:
+    if status != 0:
+        validator_Logger.info(" **************** EXCEPTIONS IN THE LOGS **************** ")
+    else:
         validator_Logger.info(" **************** NO ISSUES FOUND IN THE LOGS **************** ")
 
 if __name__ == "__main__":
